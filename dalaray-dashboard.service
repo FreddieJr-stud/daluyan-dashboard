@@ -1,0 +1,18 @@
+[Unit]
+Description=M/B Dalaray Live Dashboard (ML predictions + telemetry)
+After=network-online.target mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sam
+WorkingDirectory=/home/sam/Thesis/Dashboard
+# Try git pull on startup (ignore failure — no internet is OK)
+ExecStartPre=-/usr/bin/git -C /home/sam/Thesis pull --ff-only
+ExecStart=/usr/bin/bash /home/sam/Thesis/Dashboard/launch_dashboard_rpi.sh --live
+Restart=on-failure
+RestartSec=10
+Environment=HOME=/home/sam
+
+[Install]
+WantedBy=multi-user.target
