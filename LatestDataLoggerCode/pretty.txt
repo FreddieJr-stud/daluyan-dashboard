@@ -1,0 +1,2 @@
+⚠️ Failed to parse JSON for row at 2026-03-18 09:57:23.684000
+Raw: ERROR: HTTPConnectionPool(host='10.0.161.22', port=8481): Max retries exceeded with url: /vessel (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x0000028CDF2B7C40>, 'Connection to 10.0.161.22 timed out. (connect timeout=5)'))
