@@ -21,27 +21,31 @@ Live operator UI streaming **11 Socket.IO event types** from the vessel's onboar
 
 ## Architecture
 
-```
-Vessel API (port 8481)  ─────┐
-                              ▼
-                       dashboard_backend.py
-                       ─────────────────
-                       │  Socket.IO server (aiohttp)
-                       │  GPS state machine (9-station geofence)
-                       │  XGBoost inference (5 models)
-                       │  Conformal q10 / q90 wrapping
-                       │  Tide harmonic model
-                       │  Weather cache (NASA POWER)
-                       │  LLM voice assistant
-                       └──────────────────
-                                ▲
-                                │ 11 Socket.IO event types
-                                ▼
-                       Flutter UI (flutter_application_1/)
-                       │  Windows · Linux · iOS
-                       │  Real-time map, charts, alerts
-                       │  Voice readouts via TTS
-                       └──────────────────
+```mermaid
+flowchart TB
+    Vessel["Vessel API<br/>(port 8481)"] --> Backend
+
+    subgraph Backend["dashboard_backend.py — async Python (aiohttp)"]
+        Socket["Socket.IO server"]
+        GPS["GPS state machine<br/>9-station geofence"]
+        XGB["XGBoost inference<br/>5 models"]
+        Conformal["Conformal q10/q90<br/>wrapping"]
+        Tide["Tide harmonic model"]
+        Weather["Weather cache<br/>(NASA POWER)"]
+        Voice["LLM voice assistant<br/>Gemini + edge-tts"]
+    end
+
+    Backend -->|11 Socket.IO<br/>event types| UI
+
+    subgraph UI["Flutter UI (flutter_application_1/)"]
+        Win["Windows"]
+        Lin["Linux"]
+        Ios["iOS"]
+        Map["Real-time map,<br/>charts, alerts"]
+        TTS["Voice readouts"]
+    end
+
+    GapCheck["555-line GAP_ANALYSIS<br/>vs. partner production code"] -.->|caught P0 drift,<br/>11/11 event types| Backend
 ```
 
 ## Configuration
